@@ -7,7 +7,10 @@ All foldable features are enabled automatically.
 
 import argparse
 import sys
+import asyncio
+import plistlib
 from src.devicemanagement.device_manager import DeviceManager
+from src.restore.restore import FileToRestore
 
 
 def apply_foldable_tweaks(dm: DeviceManager, udid: str = None) -> int:
@@ -39,10 +42,7 @@ def apply_foldable_tweaks(dm: DeviceManager, udid: str = None) -> int:
         
         print(f"Applying foldable tweaks to {model} ({version})...")
         
-        # Max Regner's foldable features - write directly to springboard plist
-        from src.controllers.plist_handler import PlistHandler
-        ph = PlistHandler(dm)
-        
+        # Max Regner's foldable features - build plist directly
         springboard_path = "/var/Managed Preferences/mobile/com.apple.springboard.plist"
         
         foldable_tweaks = {
@@ -58,23 +58,39 @@ def apply_foldable_tweaks(dm: DeviceManager, udid: str = None) -> int:
             "SBEnableOptimizedWidgets": True,
         }
         
-        # Read existing plist
-        try:
-            existing = ph.read_plist(springboard_path)
-        except Exception:
-            existing = {}
+        # Build the plist content
+        plist_content = plistlib.dumps(foldable_tweaks)
         
-        # Merge foldable tweaks
-        existing.update(foldable_tweaks)
+        # Use DeviceManager to write the plist
+        from src.restore.restore import restore_files
         
-        # Write back
-        ph.write_plist(springboard_path, existing)
+        files_to_restore = []
+        file_path, domain = dm.get_domain_for_path(springboard_path)
+        files_to_restore.append(FileToRestore(
+            contents=plist_content,
+            restore_path=file_path,
+            domain=domain,
+            owner=501, group=501
+        ))
+        
+        # Apply the restore
+        def update_label(msg):
+            print(f"  {msg}")
+        
+        asyncio.run(dm.start_restore(
+            files_to_restore=files_to_restore,
+            update_label=update_label,
+            skip_protective_backup=True
+        ))
+        
         print("Foldable tweaks applied successfully!")
         print("Reboot your device for changes to take effect.")
         return 0
         
     except Exception as e:
         print(f"Error: {e}")
+        import traceback
+        traceback.print_exc()
         return 1
 
 
