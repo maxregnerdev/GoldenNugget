@@ -65,6 +65,18 @@ class TweakID(Enum):
     IgnoreSolariumOptOut = auto()
     DisableSpecularEverywhere = auto()
 
+    # iPhone Fold Mode
+    EnableFoldMode = auto()
+    ForceFoldState = auto()
+    FoldStateValue = auto()
+    EnableFlexMode = auto()
+    EnableMultiDisplay = auto()
+    EnableAdaptiveMultitasking = auto()
+    EnableSplitView = auto()
+    EnableHingeAwareness = auto()
+    MechanicalAngleDegrees = auto()
+    EnableOptimizedWidgets = auto()
+
     # daemons
     Daemons = auto()
     ClearScreenTimeAgentPlist = auto()
