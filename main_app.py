@@ -76,18 +76,29 @@ def main() -> int:
         mode_index = sys.argv.index("--mode")
         if mode_index + 1 < len(sys.argv):
             mode = sys.argv[mode_index + 1]
-            if mode == "foldable":
-                from src.cli.foldable_mode import main as foldable_main
-                foldable_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
-                return foldable_main(foldable_args)
-            elif mode == "maxregneros":
-                from src.cli.maxregneros_mode import main as maxregneros_main
-                maxregneros_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
-                return maxregneros_main(maxregneros_args)
-            elif mode == "maxregnercore":
-                from src.cli.maxregner_core import main as maxregnercore_main
-                maxregnercore_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
-                return maxregnercore_main(maxregnercore_args)
+            try:
+                if mode == "foldable":
+                    from src.cli.foldable_mode import main as foldable_main
+                    foldable_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
+                    return foldable_main(foldable_args)
+                elif mode == "maxregneros":
+                    from src.cli.maxregneros_mode import main as maxregneros_main
+                    maxregneros_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
+                    return maxregneros_main(maxregneros_args)
+                elif mode == "maxregnercore":
+                    from src.cli.maxregner_core import main as maxregnercore_main
+                    maxregnercore_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
+                    return maxregnercore_main(maxregnercore_args)
+            except ModuleNotFoundError as e:
+                print(f"\n{'='*70}")
+                print(f"  ERROR: {e}")
+                print(f"{'='*70}")
+                print(f"\nModule not found: {e.name}")
+                print("\nThis means you're using an old build of Nugget.")
+                print("The MaxRegner Core feature was added after your build.")
+                print("\nTo fix: Rebuild Nugget with the latest code")
+                print(f"{'='*70}\n")
+                sys.exit(1)
 
     # 2. CLI DISPATCHER
     if len(sys.argv) > 1:

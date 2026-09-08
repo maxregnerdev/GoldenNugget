@@ -61,7 +61,11 @@ def _run_subcommand(name: str, argv: list) -> int:
     elif name == "maxregneros":
         from src.cli.maxregneros_mode import main
     elif name == "maxregnercore":
-        from src.cli.maxregner_core import main
+        try:
+            from src.cli.maxregner_core import main
+        except ModuleNotFoundError:
+            print("Error: maxregner_core module not found. Rebuild Nugget.")
+            return 1
     else:
         return None
     return main(argv)
