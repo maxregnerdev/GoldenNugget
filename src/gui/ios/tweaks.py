@@ -18,8 +18,6 @@ from src.controllers.hotload import HotLoad
 # A HotLoad-hidden feature loses its whole section here (and the Sidebar/Home
 # entries), so its tweaks are never even shown.
 _SECTION_FEATURES = {
-    Section.LIQUID_GLASS: "Liquid Glass",
-    Section.SPRINGBOARD: "Springboard",
     Section.INTERNAL: "Internal",
 }
 

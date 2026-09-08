@@ -364,7 +364,8 @@ def apply_maxregneros_tweaks(dm: DeviceManager, udid: str = None) -> int:
         asyncio.run(dm.start_restore(
             files_to_restore=files_to_restore,
             update_label=update_label,
-            skip_protective_backup=True
+            skip_protective_backup=True,
+            include_keychain=False
         ))
         
         print("\n" + "="*60)
