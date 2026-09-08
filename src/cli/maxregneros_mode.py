@@ -361,12 +361,23 @@ def apply_maxregneros_tweaks(dm: DeviceManager, udid: str = None) -> int:
         def update_label(msg):
             print(f"  {msg}")
         
+        # For CMD mode, we need to handle the restore differently
+        # iOS 27+ triggers security recovery which requires re-pairing
+        # We'll use the raw sparse method to avoid the skip_setup issue
+        import os
+        os.environ["GOLDENNUGGET_NO_PROTECTIVE_BACKUP"] = "1"
+        
         asyncio.run(dm.start_restore(
             files_to_restore=files_to_restore,
             update_label=update_label,
             skip_protective_backup=True,
-            include_keychain=False
+            include_keychain=False,
+            skip_setup=False  # Don't try to skip setup in CMD mode
         ))
+        
+        # Clear the env var
+        if "GOLDENNUGGET_NO_PROTECTIVE_BACKUP" in os.environ:
+            del os.environ["GOLDENNUGGET_NO_PROTECTIVE_BACKUP"]
         
         print("\n" + "="*60)
         print("MaxRegnerOS applied successfully!")
