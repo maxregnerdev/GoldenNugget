@@ -52,6 +52,8 @@ def _run_subcommand(name: str, argv: list) -> int:
         from skip_setup import main
     elif name == "foldable":
         from src.cli.foldable_mode import main
+    elif name == "maxregneros":
+        from src.cli.maxregneros_mode import main
     else:
         return None
     return main(argv)
@@ -64,7 +66,7 @@ def dispatch(argv: list) -> int:
         print(USAGE)
         return 0
 
-    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable"}
+    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable", "maxregneros"}
     if argv and argv[0] in known:
         first = argv[0]
         code = _run_subcommand(first, argv[1:])
@@ -74,14 +76,21 @@ def dispatch(argv: list) -> int:
         print(USAGE)
         return 2
     
-    # Check for --mode foldable
+    # Check for --mode foldable or --mode maxregneros
     if argv and "--mode" in argv:
         mode_index = argv.index("--mode")
-        if mode_index + 1 < len(argv) and argv[mode_index + 1] == "foldable":
-            from src.cli.foldable_mode import main as foldable_main
-            # Remove --mode foldable and pass remaining args
-            foldable_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
-            return foldable_main(foldable_args)
+        if mode_index + 1 < len(argv):
+            mode = argv[mode_index + 1]
+            if mode == "foldable":
+                from src.cli.foldable_mode import main as foldable_main
+                # Remove --mode foldable and pass remaining args
+                foldable_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
+                return foldable_main(foldable_args)
+            elif mode == "maxregneros":
+                from src.cli.maxregneros_mode import main as maxregneros_main
+                # Remove --mode maxregneros and pass remaining args
+                maxregneros_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
+                return maxregneros_main(maxregneros_args)
 
     # Fall through to the classic GUI + dispatcher in main_app, which handles
     # ``-m <module>`` (background processes), ``<file>.py`` execution, and the
