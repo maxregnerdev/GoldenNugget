@@ -13,7 +13,13 @@ from src.devicemanagement.device_manager import DeviceManager
 def apply_foldable_tweaks(dm: DeviceManager, udid: str = None) -> int:
     """Apply all foldable iPhone tweaks to the connected device."""
     try:
-        device = dm.get_device(udid) if udid else dm.get_current_device()
+        # Get current device from data_singleton
+        if udid:
+            # Find device by UDID
+            device = next((d for d in dm.devices if str(d.udid) == str(udid)), None)
+        else:
+            device = dm.data_singleton.current_device
+        
         if not device:
             print("Error: No device connected. Please connect an iPhone.")
             return 1
