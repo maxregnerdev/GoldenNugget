@@ -1,19 +1,22 @@
-"""GoldenNugget unified CLI dispatch logic.
+"""GoldenNugget unified CLI dispatch logic (v10.0.0 - Max Regner Edition).
 
 Houses the subcommand routing and usage text for the bundled ``Nugget``
 binary. The executable entry point (root ``nugget_cli.py``) is only a thin
 shim that calls :func:`main` here; keeping the logic inside ``src/cli``
 keeps the top-level script trivial and the dispatch logic unit-testable.
+
+Max Regner: CMD-only foldable mode implementation.
 """
 
 import sys
 
-USAGE = """\
-GoldenNugget - unified CLI
+USAGE = """\\nGoldenNugget - unified CLI (v10.0.0 - Max Regner Edition)
 
 Usage:
   Nugget                              Launch the GUI
   Nugget --usage | --help             Show this help
+  Nugget --mode foldable [--udid UDID] [--list] [--version]
+      Apply Max Regner's foldable iPhone features (CMD only)
 
   Nugget apply-wallpaper [TENDIE] [--udid UDID] [--list]
       Apply a .tendies wallpaper to a connected device.
@@ -22,8 +25,7 @@ Usage:
                        [--cache-root DIR] [--timeout MINUTES]
                        [--no-skip-setup] [--no-reboot]
       Restore the last protective backup cache after a failed/wedged apply,
-      then apply skip-setup and reboot (Phase 5). Add --no-skip-setup /
-      --no-reboot to skip those steps.
+      then apply skip-setup and reboot (Phase 5).
 
   Nugget restore [same options as restore-cache]
       Alias for restore-cache (safe, manifest-pruned protective restore).
@@ -48,6 +50,8 @@ def _run_subcommand(name: str, argv: list) -> int:
         from restore import main
     elif name == "skip-setup":
         from skip_setup import main
+    elif name == "foldable":
+        from src.cli.foldable_mode import main
     else:
         return None
     return main(argv)
@@ -60,7 +64,7 @@ def dispatch(argv: list) -> int:
         print(USAGE)
         return 0
 
-    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup"}
+    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable"}
     if argv and argv[0] in known:
         first = argv[0]
         code = _run_subcommand(first, argv[1:])
@@ -69,6 +73,15 @@ def dispatch(argv: list) -> int:
         print(f"Unknown subcommand: {first}", file=sys.stderr)
         print(USAGE)
         return 2
+    
+    # Check for --mode foldable
+    if argv and "--mode" in argv:
+        mode_index = argv.index("--mode")
+        if mode_index + 1 < len(argv) and argv[mode_index + 1] == "foldable":
+            from src.cli.foldable_mode import main as foldable_main
+            # Remove --mode foldable and pass remaining args
+            foldable_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
+            return foldable_main(foldable_args)
 
     # Fall through to the classic GUI + dispatcher in main_app, which handles
     # ``-m <module>`` (background processes), ``<file>.py`` execution, and the

@@ -68,3 +68,15 @@ class TweakID(Enum):
     # daemons
     Daemons = auto()
     ClearScreenTimeAgentPlist = auto()
+
+    # Fold Mode (Max Regner Features)
+    SBEnableFoldMode = auto()
+    SBForceFoldState = auto()
+    SBFoldStateValue = auto()
+    SBEnableFlexMode = auto()
+    SBEnableMultiDisplay = auto()
+    SBEnableAdaptiveMultitasking = auto()
+    SBEnableSplitView = auto()
+    SBEnableHingeAwareness = auto()
+    SBMechanicalAngleDegrees = auto()
+    SBEnableOptimizedWidgets = auto()
