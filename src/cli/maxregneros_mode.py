@@ -595,13 +595,28 @@ def apply_maxregneros_tweaks(dm: DeviceManager, udid: str = None) -> int:
         if "GOLDENNUGGET_NO_PROTECTIVE_BACKUP" in os.environ:
             del os.environ["GOLDENNUGGET_NO_PROTECTIVE_BACKUP"]
         
-        asyncio.run(dm.start_restore(
-            files_to_restore=files_to_restore,
-            update_label=update_label,
-            skip_protective_backup=False,  # Allow protective backup for iOS 27
-            include_keychain=True,
-            skip_setup=True  # THIS IS CRITICAL - skip setup to preserve changes
-        ))
+        # For iOS 27, we need to use the protective backup flow
+        # but we can't pass skip_setup directly to start_restore
+        # The restore_files function accepts skip_setup
+        # We'll call _apply_changes which calls _apply_tweak_pass which calls start_restore
+        # But actually, let's just pass the files directly to restore_files
+        
+        from src.restore.restore import restore_files
+        from src.devicemanagement.session import lockdown_session
+        
+        async def apply_with_skip_setup():
+            async with lockdown_session(device.udid) as ld:
+                await restore_files(
+                    files=files_to_restore,
+                    reboot=True,
+                    lockdown_client=ld,
+                    progress_callback=update_label,
+                    skip_setup=True,  # THIS IS THE KEY - skip setup to preserve changes
+                    skip_protective_backup=False,
+                    include_keychain=True
+                )
+        
+        asyncio.run(apply_with_skip_setup())
         
         print("\n" + "="*70)
         print("  MAXREGNEROS APPLIED SUCCESSFULLY!")
