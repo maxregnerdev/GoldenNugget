@@ -18,6 +18,12 @@ Usage:
   Nugget --mode foldable [--udid UDID] [--list] [--version]
       Apply Max Regner's foldable iPhone features (CMD only)
 
+  Nugget --mode maxregneros [--udid UDID] [--list] [--version]
+      Apply MaxRegnerOS - complete iPhone transformation (500+ tweaks)
+
+  Nugget --mode maxregnercore [--udid UDID] [--list] [--version]
+      Apply MaxRegner Core & Sound Scheme - system sounds + core rewrites
+
   Nugget apply-wallpaper [TENDIE] [--udid UDID] [--list]
       Apply a .tendies wallpaper to a connected device.
 
@@ -54,6 +60,8 @@ def _run_subcommand(name: str, argv: list) -> int:
         from src.cli.foldable_mode import main
     elif name == "maxregneros":
         from src.cli.maxregneros_mode import main
+    elif name == "maxregnercore":
+        from src.cli.maxregner_core import main
     else:
         return None
     return main(argv)
@@ -66,7 +74,7 @@ def dispatch(argv: list) -> int:
         print(USAGE)
         return 0
 
-    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable", "maxregneros"}
+    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable", "maxregneros", "maxregnercore"}
     if argv and argv[0] in known:
         first = argv[0]
         code = _run_subcommand(first, argv[1:])

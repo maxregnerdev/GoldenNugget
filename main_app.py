@@ -71,7 +71,7 @@ def main() -> int:
     """GUI + fallback CLI dispatcher entry point (importable for the wrapper)."""
 
     # 2. CMD-ONLY MODE CHECK
-    # If --mode foldable or --mode maxregneros is specified, bypass GUI entirely and run CLI only
+    # If --mode foldable, maxregneros, or maxregnercore is specified, bypass GUI entirely and run CLI only
     if "--mode" in sys.argv:
         mode_index = sys.argv.index("--mode")
         if mode_index + 1 < len(sys.argv):
@@ -84,6 +84,10 @@ def main() -> int:
                 from src.cli.maxregneros_mode import main as maxregneros_main
                 maxregneros_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
                 return maxregneros_main(maxregneros_args)
+            elif mode == "maxregnercore":
+                from src.cli.maxregner_core import main as maxregnercore_main
+                maxregnercore_args = [arg for i, arg in enumerate(sys.argv) if i < mode_index or i > mode_index + 1]
+                return maxregnercore_main(maxregnercore_args)
 
     # 2. CLI DISPATCHER
     if len(sys.argv) > 1:
