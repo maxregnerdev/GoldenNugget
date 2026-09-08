@@ -101,6 +101,12 @@ Examples:
     
     dm = DeviceManager()
     
+    # Enumerate connected devices (needed for CMD mode)
+    from PySide6.QtCore import QSettings
+    from src.gui.thread_workers.apply_worker import ApplyAlertMessage
+    settings = QSettings("GoldenNugget", "GoldenNugget")
+    dm.get_devices(settings, show_alert=lambda x: None)
+    
     if args.list:
         devices = dm.devices
         if not devices:
@@ -110,6 +116,15 @@ Examples:
         for i, device in enumerate(devices):
             print(f"  {i+1}. {device.name} - {device.model} (iOS {device.version}) - UDID: {device.udid}")
         return 0
+    
+    # If no device specified and no devices connected, show error
+    if not dm.devices:
+        print("Error: No devices connected. Please connect your iPhone and make sure it's trusted.")
+        return 1
+    
+    # If no UDID specified, use the first connected device
+    if not args.udid:
+        args.udid = str(dm.devices[0].udid)
     
     return apply_foldable_tweaks(dm, args.udid)
 
