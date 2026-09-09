@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "version": 2,
+    "description": "MaxRegnerUI - real iOS tweak preset (no fake keys)",
+    "device_model": "iPhone",
+    "ios_version": "27.0+",
+    "created_at": 0,
+    "updated_at": 0,
+    "tags": ["maxregner", "fold", "liquid-glass"]
+  },
+  "tweaks": {
+    "SBEnableFoldMode": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBForceFoldState": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBFoldStateValue": {"type": "BasicPlistTweak", "enabled": true, "value": 0},
+    "SBEnableFlexMode": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBEnableMultiDisplay": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBEnableAdaptiveMultitasking": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBEnableSplitView": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBEnableHingeAwareness": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBMechanicalAngleDegrees": {"type": "BasicPlistTweak", "enabled": true, "value": 90},
+    "SBEnableOptimizedWidgets": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+
+    "ForceEnhancedSpeculars": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "ForceSolariumIntelligence": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "IgnoreSolariumHardwareCheck": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "IgnoreSolariumOptOut": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "IgnoreSolariumLinkedOnCheck": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "UISolariumFallback": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+
+    "SBShowSupervisionTextOnLockScreen": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBBuildNumber": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBIconVisibility": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBAlwaysShowSystemApertureInSnapshots": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "EnableWakeGestureHaptic": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBDontLockAfterCrash": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBDontDimOrLockOnAC": {"type": "BasicPlistTweak", "enabled": true, "value": true},
+    "SBNeverBreadcrumb": {"type": "BasicPlistTweak", "enabled": true, "value": true}
+  }
+}

@@ -94,14 +94,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ios_statusbar = IOSStatusBarPage(self)
         self.ios_apply = IOSApplyPage(self)
         self.ios_internal = IOSSectionPage(self, Section.INTERNAL)
-        self.ios_pages.addWidget(self.ios_home)
-        self.ios_pages.addWidget(self.ios_tweaks)
-        self.ios_pages.addWidget(self.ios_posterboard)
-        self.ios_pages.addWidget(self.ios_daemons)
-        self.ios_pages.addWidget(self.ios_settings)
-        self.ios_pages.addWidget(self.ios_statusbar)
-        self.ios_pages.addWidget(self.ios_apply)
-        self.ios_pages.addWidget(self.ios_internal)
+        self.ios_springboard = IOSSectionPage(self, Section.SPRINGBOARD)
+        self.ios_liquidglass = IOSSectionPage(self, Section.LIQUID_GLASS)
+        self.ios_fold = IOSSectionPage(self, Section.FOLD)
+        self.ios_pages.addWidget(self.ios_home)          # 0
+        self.ios_pages.addWidget(self.ios_tweaks)        # 1
+        self.ios_pages.addWidget(self.ios_posterboard)  # 2
+        self.ios_pages.addWidget(self.ios_daemons)       # 3
+        self.ios_pages.addWidget(self.ios_settings)      # 4
+        self.ios_pages.addWidget(self.ios_statusbar)    # 5
+        self.ios_pages.addWidget(self.ios_apply)        # 6
+        self.ios_pages.addWidget(self.ios_internal)     # 7
+        self.ios_pages.addWidget(self.ios_springboard)  # 8
+        self.ios_pages.addWidget(self.ios_liquidglass)  # 9
+        self.ios_pages.addWidget(self.ios_fold)         # 10
 
         # Shared reusable header: one instance for every iOS subpage,
         # reconfigured on page change (title / back / right action).
@@ -116,6 +122,9 @@ class MainWindow(QtWidgets.QMainWindow):
             5: QCoreApplication.translate("Nugget", "Status Bar"),
             6: QCoreApplication.translate("Nugget", "Apply"),
             7: QtCore.QCoreApplication.translate("Nugget", "Internal"),
+            8: QtCore.QCoreApplication.translate("Nugget", "Springboard"),
+            9: QtCore.QCoreApplication.translate("Nugget", "Liquid Glass"),
+            10: QtCore.QCoreApplication.translate("Nugget", "Fold Mode (Max Regner)"),
         }
         self._nav_right_actions = {
             2: ("+ Add Tendies", self.ios_posterboard.show_add_tendies_dialog),
@@ -631,8 +640,8 @@ class MainWindow(QtWidgets.QMainWindow):
         page_to_btn = {
             0: 0,   # home
             2: 1,   # posterboard
-            7: 2,   # springboard
-            8: 3,   # internal
+            8: 2,   # springboard
+            7: 3,   # internal
             9: 4,   # liquid glass
             3: 5,   # daemons
             6: 6,   # apply
@@ -734,11 +743,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._sync_sidebar_selection()
 
     def on_springboardOptionsPageBtn_clicked(self):
-        self.show_ios_page(7)
+        self.show_ios_page(8)
         self._sync_sidebar_selection()
 
     def on_internalOptionsPageBtn_clicked(self):
-        self.show_ios_page(8)
+        self.show_ios_page(7)
         self._sync_sidebar_selection()
 
     def on_liquidGlassPageBtn_clicked(self):
