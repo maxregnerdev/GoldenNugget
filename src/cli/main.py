@@ -18,8 +18,8 @@ Usage:
   Nugget --mode foldable [--udid UDID] [--list] [--version]
       Apply Max Regner's foldable iPhone features (CMD only)
 
-  Nugget --mode maxregneros [--udid UDID] [--list] [--version]
-      Apply MaxRegnerOS - complete iPhone transformation (500+ tweaks)
+  Nugget --mode maxregnerui [--udid UDID] [--wallpaper TENDIES] [--list] [--version]
+      Apply MaxRegnerUI - REAL iOS patching (real tweak keys + fold mode + optional wallpaper)
 
   Nugget --mode maxregnercore [--udid UDID] [--list] [--version]
       Apply MaxRegner Core & Sound Scheme - system sounds + core rewrites
@@ -58,7 +58,7 @@ def _run_subcommand(name: str, argv: list) -> int:
         from skip_setup import main
     elif name == "foldable":
         from src.cli.foldable_mode import main
-    elif name == "maxregneros":
+    elif name == "maxregnerui":
         from src.cli.maxregneros_mode import main
     elif name == "maxregnercore":
         try:
@@ -78,7 +78,7 @@ def dispatch(argv: list) -> int:
         print(USAGE)
         return 0
 
-    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable", "maxregneros", "maxregnercore"}
+    known = {"apply-wallpaper", "restore-cache", "restore", "skip-setup", "foldable", "maxregnerui", "maxregnercore"}
     if argv and argv[0] in known:
         first = argv[0]
         code = _run_subcommand(first, argv[1:])
@@ -98,11 +98,11 @@ def dispatch(argv: list) -> int:
                 # Remove --mode foldable and pass remaining args
                 foldable_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
                 return foldable_main(foldable_args)
-            elif mode == "maxregneros":
-                from src.cli.maxregneros_mode import main as maxregneros_main
-                # Remove --mode maxregneros and pass remaining args
-                maxregneros_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
-                return maxregneros_main(maxregneros_args)
+            elif mode == "maxregnerui":
+                from src.cli.maxregneros_mode import main as maxregnerui_main
+                # Remove --mode maxregnerui and pass remaining args
+                maxregnerui_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
+                return maxregnerui_main(maxregnerui_args)
 
     # Fall through to the classic GUI + dispatcher in main_app, which handles
     # ``-m <module>`` (background processes), ``<file>.py`` execution, and the
