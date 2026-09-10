@@ -304,6 +304,14 @@ class DeviceManager:
         except Exception:
             return False
         
+    def get_current_device_is_iphone_16e(self) -> bool:
+        """True if the current device is an iPhone 16e (model iPhone17,5)."""
+        try:
+            model = self.get_current_device_model() or ""
+            return model.strip() == "iPhone17,5"
+        except Exception:
+            return False
+
     def reset_device_pairing(self):
         asyncio.run(self._reset_device_pairing())
     async def _reset_device_pairing(self):
