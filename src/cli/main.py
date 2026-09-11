@@ -103,6 +103,11 @@ def dispatch(argv: list) -> int:
                 # Remove --mode maxregneros and pass remaining args
                 maxregneros_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
                 return maxregneros_main(maxregneros_args)
+            elif mode == "maxregnercore":
+                from src.cli.maxregner_core import main as maxregnercore_main
+                # Remove --mode maxregnercore and pass remaining args
+                maxregnercore_args = [arg for i, arg in enumerate(argv) if i < mode_index or i > mode_index + 1]
+                return maxregnercore_main(maxregnercore_args)
 
     # Fall through to the classic GUI + dispatcher in main_app, which handles
     # ``-m <module>`` (background processes), ``<file>.py`` execution, and the
